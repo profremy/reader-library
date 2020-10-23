@@ -1,0 +1,24 @@
+{
+  "name": "reader-library",
+  "version": "1.0.0",
+  "description": "A web application to help organize a personal collection of books",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/profremy/reader-library.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/profremy/reader-library/issues"
+  },
+  "homepage": "https://github.com/profremy/reader-library#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
