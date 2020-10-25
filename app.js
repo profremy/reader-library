@@ -1,14 +1,19 @@
 const path = require('path');
 const express = require('express');
+const hbs = require('express-handlebars');
 const pool = require('./db');
 
 const app = express();
 
 const PORT = process.env.PORT || 5000; // HEROKU supports this for hosting
 app.get('/', (req, res) => {
-  res.send('Hello World!');
+  res.render('helloworld');
 });
 
+app.use('/static', express.static('public')); //makes it possible to access library bundles
+
+/*
+// This routed is needed to run once to create and initially populate DB
 app.get('/createandseedtables', async (req, res) => {
   const sql = `
             CREATE DATABASE IF NOT EXISTS library;
@@ -151,6 +156,18 @@ app.get('/createandseedtables', async (req, res) => {
   }
   res.send('Tables successfully created and seeded...');
 });
+*/
+app.engine(
+  'hbs',
+  hbs({
+    extname: 'hbs',
+    defaultLayout: 'main',
+    layoutsDir: './views/layouts',
+    partialsDir: './views/includes',
+  })
+);
+
+app.set('view engine', 'hbs');
 
 app.use((req, res, next) => {
   const err = new Error('Page not found');
