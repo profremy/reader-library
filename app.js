@@ -1,16 +1,39 @@
 const path = require('path');
 const express = require('express');
 const hbs = require('express-handlebars');
-const pool = require('./db');
+//const favicon = require('serve-favicon');
+
+// This was use to create and run the database for the first time
+// It is no longer needer here since the database is created already
+// Moved to books.js
+
+// const pool = require('./db');
 
 const app = express();
 
 const PORT = process.env.PORT || 5000; // HEROKU supports this for hosting
-app.get('/', (req, res) => {
-  res.render('helloworld');
-});
+// app.get('/', (req, res) => {
+//   res.render('helloworld');
+// });
 
-app.use('/static', express.static('public')); //makes it possible to access library bundles
+// Setup express routes
+const mainRoutes = require('./routes');
+const booksRoutes = require('./routes/books');
+const musicRoutes = require('./routes/music');
+const moviesRoutes = require('./routes/movies');
+const comicsRoutes = require('./routes/comics');
+
+app.use(mainRoutes);
+app.use('/books', booksRoutes);
+app.use('/music', musicRoutes);
+app.use('/movies', moviesRoutes);
+app.use('/comics', comicsRoutes);
+
+//makes it possible to access library bundles
+app.use('/static', express.static('public'));
+
+// Middleware for favicon image
+//app.use(favicon(path.resolve(__dirname, 'public', 'library-logo.png')));
 
 /*
 // This routed is needed to run once to create and initially populate DB
@@ -157,6 +180,8 @@ app.get('/createandseedtables', async (req, res) => {
   res.send('Tables successfully created and seeded...');
 });
 */
+
+// setup handlebars template engine
 app.engine(
   'hbs',
   hbs({
@@ -169,22 +194,25 @@ app.engine(
 
 app.set('view engine', 'hbs');
 
+// 404 middleware
 app.use((req, res, next) => {
   const err = new Error('Page not found');
   err.status = 404;
   next(err);
 });
 
+// Error handler middleware
 app.use((err, req, res, next) => {
-  res.status(err.status).send(
+  res.status(err.status || 500).send(
     `
-    <h1>${err.status}</h1>
+    <h1>${err.status || 500}</h1>
     <h2>Error: ${err.message}</h2>
     <p>Stack: ${err.stack}</p>
     `
   );
 });
 
+// Sever port
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
 });

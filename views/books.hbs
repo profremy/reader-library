@@ -1,0 +1,77 @@
+<table id="books-table" class="table xs-hide table-bordered table-hover table-sm">
+    <thead>
+        <tr>
+            <th style="width:5%;" scope="col"></th>
+            <th style="width:25%;" scope="col">Author</th>
+            <th style="width:35%;" scope="col">Title</th>
+            <th style="width:10%;" scope="col">Type</th>
+            <th style="width:10%;" scope="col">Sub Type</th>
+            <th style="width:10%;" scope="col">Location</th>
+            <th style="width:5%;" scope="col"></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {{#if books}}
+        {{#each books}}
+        <tr>
+            <td scope="row" class="text-center">
+                <a href="#">
+                    <span>
+                        <ion-icon size="small" name="pencil-sharp"></ion-icon>
+                    </span>
+                </a>
+            </td>
+            <td>
+                <a href="#">{{author}}</a>
+            </td>
+            <td>
+                <a href="#">{{title}} ({{language}})</a>
+            </td>
+            <td>{{type}}</td>
+            <td>{{sub_type}}</td>
+            <td>{{location}}</td>
+            <td>
+                <a href="#">
+                    <span>
+                        <ion-icon size="small" name="trash-sharp"></ion-icon>
+                    </span>
+                </a>
+            </td>
+        </tr>
+        {{/each}}
+        {{/if}}
+    </tbody>
+</table>
+
+<section id="book-cards-list" class="sm-hide">
+    {{#if books}}
+    {{#each books}}
+    {{!-- .card>.card-body>h5.card-title+p.card-text>strong*5 --}}
+    <div class="card">
+        <div class="card-body">
+            <p class="card-text"></p>
+            <h5 class="card-title">{{title}}</h5>
+            <strong>Author:</strong> {{author}}<br />
+            <strong>Type:</strong> {{type}}<br />
+            <strong>Sub Type:</strong> {{sub_type}}<br />
+            <strong>Language:</strong> {{language}}<br />
+            <strong>Location:</strong> {{location}}<br />
+            </p>
+            <a href="#" class="btn btn-primary">Book Details</a>
+            <a href="#">
+                <button class="btn btn-success" tooltip="Edit">
+                    <ion-icon size="small" name="pencil-sharp"></ion-icon>
+                </button>
+            </a>
+            <a href="#">
+                <button class="btn btn-danger" tooltip="Delete">
+                    <ion-icon size="small" name="trash-sharp"></ion-icon>
+                </button>
+            </a>
+        </div>
+    </div>
+
+    {{/each}}
+    {{/if}}
+</section>

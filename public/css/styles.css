@@ -1,1 +1,85 @@
 @import '~bootstrap/dist/css/bootstrap.min.css';
+
+
+*, .btn {
+    border-radius: 0;
+}
+
+ion-icon {
+    pointer-events: none;
+}
+
+.flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header {
+    background: #555;
+    padding: 2rem;
+}
+
+header h1 a {
+    color: #fff;
+}
+
+header h1 a:hover {
+    color: #fff;
+    text-decoration: none;
+}
+#logo {
+    width: 200px;
+}
+
+#logo img {
+    width: 100%;
+}
+
+#collections > div {
+    margin-top: 2rem;
+}
+#collections > div:first-child {
+    margin-top: 0;
+}
+
+#collections .btn {
+    width: 100%;
+    font-size: 4rem;
+}
+
+.sm-hide {
+    display: none;
+}
+
+@media (max-width:650px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+    #collections .btn {
+        font-size: 2rem;
+    }
+
+    .sm-hide {
+        display: block;
+    }
+
+    .xs-hide {
+        display: none;
+    }
+}
+
+/* @media (max-width:480px) {
+
+    #logo {
+        width: 100px;
+    }
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    html {
+        font-size: 0.7rem;
+    }
+} */
