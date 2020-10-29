@@ -1,0 +1,71 @@
+<div class="container">
+    <a href="/books" class="btn btn-success top-float-button">
+        <span>
+            <ion-icon name="arrow-back-sharp"></ion-icon>
+        </span>
+        <span>Back to search</span>
+    </a>
+    <h3>Enter the information for a new book bellow:</h3>
+
+    <form action="/books/insertbook" method="POST" id="insertbook-form">
+        <div class="form-group">
+            <label for="author" class="sr-only">Author</label>
+            <input type="text" name="author" id="author" class="form-control" placeholder="Author">
+        </div>
+        <div class="form-group">
+            <label for="title" class="sr-only">Title</label>
+            <input type="text" name="title" id="title" class="form-control" placeholder="Title">
+        </div>
+        <div class="form-group">
+            <label for="type" class="sr-only">Type</label>
+            <select name="type" id="type" class="form-control">
+                <option value="" selected disabled>--Select Type--</option>
+                {{#if types}}
+                {{#each types}}
+                <option value="{{id}}">{{type}}</option>
+                {{/each}}
+                {{/if}}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="sub_type" class="sr-only">Sub Type</label>
+            <select name="sub_type" id="sub_type" class="form-control">
+                <option value="" selected disabled>--Select Sub Type--</option>
+                {{#if subTypes}}
+                {{#each subTypes}}
+                <option value="{{id}}">{{sub_type}}</option>
+                {{/each}}
+                {{/if}}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="language" class="sr-only">Language</label>
+            <select name="language" id="language" class="form-control">
+                <option value="" selected disabled>--Select Language--</option>
+                {{#if languages}}
+                {{#each languages}}
+                <option value="{{id}}">{{language}}</option>
+                {{/each}}
+                {{/if}}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="location" class="sr-only">Location</label>
+            <select name="location" id="location" class="form-control">
+                <option value="" selected disabled>--Select Location--</option>
+                {{#if locations}}
+                {{#each locations}}
+                <option value="{{id}}">{{location}}</option>
+                {{/each}}
+                {{/if}}
+            </select>
+        </div>
+        <button class="btn btn-primary" type="submit">
+            <span>
+                <ion-icon size="small" name="add-circle-sharp"></ion-icon>
+            </span>
+            <span>Add book</span>
+        </button>
+        <div class="formMessage">{{msg}}</div>
+    </form>
+</div>

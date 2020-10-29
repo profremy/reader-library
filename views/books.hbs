@@ -1,3 +1,22 @@
+{{!-- .search-form-container.margin-bottom>form.margin-bottom>input.form-control#book-search+button#search-books-submit.btn.btn-primary>span.fa.fa-search --}}
+<div class="search-form-container margin-bottom">
+    <form action="/books/searchbooks" method="GET" class="margin-bottom" id="search-form">
+        <input type="text" name="booksearch" class="form-control" id="book-search"
+            placeholder="Search Author, Title, Type, Sub Type, or Location">
+        <button id="search-books-submit" class="btn btn-primary" type="submit">
+            <span>
+                <ion-icon size="small" name="search-circle-sharp"></ion-icon>
+            </span>
+        </button>
+    </form>
+    <a href="/books/addbook" class="btn btn-success top-float-button" title="Add a new book to your Library">
+        <span>
+            <ion-icon size="small" name="add-circle-sharp"></ion-icon>
+        </span>
+        <span>Add a book to your library</span>
+    </a>
+</div>
+
 <table id="books-table" class="table xs-hide table-bordered table-hover table-sm">
     <thead>
         <tr>
@@ -16,23 +35,23 @@
         {{#each books}}
         <tr>
             <td scope="row" class="text-center">
-                <a href="#">
+                <a href="#" class="edit-book">
                     <span>
                         <ion-icon size="small" name="pencil-sharp"></ion-icon>
                     </span>
                 </a>
             </td>
-            <td>
-                <a href="#">{{author}}</a>
+            <td class="break-word">
+                <a href="#" class="dark-link">{{author}}</a>
             </td>
-            <td>
-                <a href="#">{{title}} ({{language}})</a>
+            <td class="break-word">
+                <a href="#" class="dark-link">{{title}} ({{language}})</a>
             </td>
             <td>{{type}}</td>
             <td>{{sub_type}}</td>
             <td>{{location}}</td>
-            <td>
-                <a href="#">
+            <td class="text-center">
+                <a href="#" class="remove-book">
                     <span>
                         <ion-icon size="small" name="trash-sharp"></ion-icon>
                     </span>
@@ -50,25 +69,22 @@
     {{!-- .card>.card-body>h5.card-title+p.card-text>strong*5 --}}
     <div class="card">
         <div class="card-body">
-            <p class="card-text"></p>
             <h5 class="card-title">{{title}}</h5>
-            <strong>Author:</strong> {{author}}<br />
-            <strong>Type:</strong> {{type}}<br />
-            <strong>Sub Type:</strong> {{sub_type}}<br />
-            <strong>Language:</strong> {{language}}<br />
-            <strong>Location:</strong> {{location}}<br />
+            <p class="card-text">
+                <strong>Author:</strong> {{author}}<br />
+                <strong>Type:</strong> {{type}}<br />
+                <strong>Sub Type:</strong> {{sub_type}}<br />
+                <strong>Language:</strong> {{language}}<br />
+                <strong>Location:</strong> {{location}}<br />
             </p>
-            <a href="#" class="btn btn-primary">Book Details</a>
-            <a href="#">
-                <button class="btn btn-success" tooltip="Edit">
-                    <ion-icon size="small" name="pencil-sharp"></ion-icon>
-                </button>
+            <a href="#" class="btn btn-primary get-book-info">Book Details</a>
+            <a href="#" class="btn btn-secondary edit-book">
+                <ion-icon size="small" name="pencil-sharp"></ion-icon>
             </a>
-            <a href="#">
-                <button class="btn btn-danger" tooltip="Delete">
-                    <ion-icon size="small" name="trash-sharp"></ion-icon>
-                </button>
-            </a>
+
+            <button class="btn btn-danger remove-book">
+                <ion-icon size="small" name="trash-sharp"></ion-icon>
+            </button>
         </div>
     </div>
 
