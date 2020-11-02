@@ -98,6 +98,10 @@ table th.text-center, table td.text-center {
     display: none;
 }
 
+.error {
+    padding: 1rem 1rem;
+    color: var(--danger);
+}
 
 @media (max-width:650px) {
     h1 {
@@ -145,17 +149,3 @@ table th.text-center, table td.text-center {
     }
 
 }
-
-/* @media (max-width:480px) {
-
-    #logo {
-        width: 100px;
-    }
-    h1 {
-        font-size: 1.5rem;
-    }
-
-    html {
-        font-size: 0.7rem;
-    }
-} */

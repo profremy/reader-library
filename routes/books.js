@@ -74,13 +74,19 @@ router.get('/', async (req, res) => {
 
 router.get('/searchbooks', async (req, res) => {
   // trim removes extra white spaces before or after term
-  const s = req.query.booksearch.trim();
 
+  // this line is vulnerable to SQL injection attacks
+  const term = req.query.booksearch; //.trim();
+
+  // Fix the vulnerability by using the escape() method
+  const s = pool.escape(`%${req.query.booksearch.trim()}%`);
   //console.log('BookSearch term is: ', s);
   //res.send('Inside the /searchbooks route');
 
+  if (term === '') return res.render('books', { books: [], errorMsg: 'Please enter a search term.' });
+
   const sql = `${retrieveBookSql}
-      WHERE book.author LIKE '%${s}%' OR book.title LIKE '%${s}%' OR book_type.type LIKE '%${s}%' OR book_sub_type.sub_type LIKE '%${s}%' OR book_language.language LIKE '%${s}%' OR book_location.location LIKE '%${s}%' ORDER BY book_type.type, book_sub_type.sub_type, book.author;
+      WHERE book.author LIKE ${s} OR book.title LIKE ${s} OR book_type.type LIKE ${s} OR book_sub_type.sub_type LIKE ${s} OR book_language.language LIKE ${s} OR book_location.location LIKE ${s} ORDER BY book_type.type, book_sub_type.sub_type, book.author;
       -- Query to retrieve books by search term`;
 
   let err;
@@ -131,8 +137,8 @@ router.post('/insertbook', async (req, res) => {
   //res.send('Inside the /insertbook route');
 
   const book = {
-    author: req.body.author,
-    title: req.body.title,
+    author: req.body.author.trim(),
+    title: req.body.title.trim(),
     book_type_id: req.body.type,
     book_sub_type_id: req.body.sub_type,
     book_language_id: req.body.language,
