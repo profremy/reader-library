@@ -22,7 +22,7 @@ INNER JOIN book_language ON book.book_language_id = book_language.id
 
 // When you add sql comment to a query string like
 // in the books search string below, it may result to 'OKPacket' at
-// the end of the result which is equal 0 result
+// the end of the result which is equal to 0 result
 // The follow function is used to ignore OKPacket and instead use the
 // 'RowDataPacket' to display results.
 
@@ -158,16 +158,76 @@ router.post('/insertbook', async (req, res) => {
   }
 });
 
-router.get('/updatebook', (req, res) => {
-  res.send('Inside the /updatebook route');
+router.get('/updatebook', async (req, res) => {
+  const id = pool.escape(req.query.id);
+  const sql = `
+    SELECT * FROM book WHERE id = ${id};
+    SELECT * FROM book_type;
+    SELECT * FROM book_sub_type;
+    SELECT * FROM book_language;
+    SELECT * FROM book_location;
+    `;
+
+  let err;
+  const results = await pool.query(sql).catch((e) => (err = e));
+
+  if (err) {
+    console.error('Sql error: ', err);
+    res.render('books', { books: [], errorMsg: 'There was an error, please try again.' });
+  } else {
+    const templateData = {
+      book: results[0][0],
+      types: results[1],
+      subTypes: results[2],
+      languages: results[3],
+      locations: results[4],
+    };
+    res.render('updatebook', templateData);
+  }
 });
 
-router.post('/updatebookbyid/:id', (req, res) => {
-  res.send('Inside the /updatebookbyid route');
+router.post('/updatebookbyid/:id', async (req, res) => {
+  const id = req.params.id;
+
+  const book = {
+    id,
+    author: req.body.author.trim(),
+    title: req.body.title.trim(),
+    book_type_id: req.body.type,
+    book_sub_type_id: req.body.sub_type,
+    book_language_id: req.body.language,
+    book_location_id: req.body.location,
+  };
+
+  let err;
+  const sql = `UPDATE book SET ? WHERE id =${pool.escape(id)};`;
+  const result = await pool.query(sql, book).catch((e) => (err = e));
+
+  if (err) {
+    console.error('Sql error: ', err);
+    res.redirect(`/books/updatebook?${id}&success=0`);
+  } else {
+    res.redirect(`/books/updatebook?${id}&success=1`);
+  }
 });
 
-router.delete('/deletebookbyid/:id', (req, res) => {
-  res.send('Inside the /updatebookbyid route');
+router.delete('/deletebook/:id', async (req, res) => {
+  const id = pool.escape(req.params.id);
+  const sql = `
+  SELECT title, author FROM book WHERE id = ${id};
+  DELETE FROM book WHERE id = ${id};
+  `;
+
+  let err;
+  const deleteResult = await pool.query(sql).catch((e) => (err = e));
+  const result = getJson(deleteResult);
+
+  if (err) {
+    console.error('Sql error: ', err);
+    res.status(500).json({ fail: true, msg: 'There was an error attempting to delete this book' });
+  } else {
+    res.status(200).json({ fail: false, msg: `${result[0].author}: ${result[0].title} was deleted successfully` });
+  }
 });
 
 module.exports = router;

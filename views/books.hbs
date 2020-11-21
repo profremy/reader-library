@@ -35,8 +35,8 @@
         {{#each books}}
         <tr>
             <td scope="row" class="text-center">
-                <a href="#" class="edit-book">
-                    <span>
+                <a href="/books/updatebook?id={{id}}" class="edit-book">
+                    <span id="pencil">
                         <ion-icon size="small" name="pencil-sharp"></ion-icon>
                     </span>
                 </a>
@@ -51,8 +51,8 @@
             <td>{{sub_type}}</td>
             <td>{{location}}</td>
             <td class="text-center">
-                <a href="#" class="remove-book">
-                    <span>
+                <a href="#" class="remove-book" data-bookid="{{id}}" data-toggle="modal" data-target="#removeBookModal">
+                    <span id="trash">
                         <ion-icon size="small" name="trash-sharp"></ion-icon>
                     </span>
                 </a>
@@ -63,8 +63,11 @@
     </tbody>
 </table>
 <h3><span class="error">{{errorMsg}}</span></h3>
+<h3><span class="success">{{successMsg}}</span></h3>
 
 <section id="book-cards-list" class="sm-hide">
+    <h5><span class="error">{{errorMsg}}</span></h5>
+    <h5><span class="success">{{successMsg}}</span></h5>
     {{#if books}}
     {{#each books}}
     {{!-- .card>.card-body>h5.card-title+p.card-text>strong*5 --}}
@@ -79,11 +82,12 @@
                 <strong>Location:</strong> {{location}}<br />
             </p>
             <a href="#" class="btn btn-primary get-book-info">Book Details</a>
-            <a href="#" class="btn btn-secondary edit-book">
+            <a href="/books/updatebook?id={{id}}" class="btn btn-secondary edit-book">
                 <ion-icon size="small" name="pencil-sharp"></ion-icon>
             </a>
 
-            <button class="btn btn-danger remove-book">
+            <button class="btn btn-danger remove-book" data-bookid="{{id}}" data-toggle="modal"
+                data-target="#removeBookModal">
                 <ion-icon size="small" name="trash-sharp"></ion-icon>
             </button>
         </div>
@@ -92,3 +96,25 @@
     {{/each}}
     {{/if}}
 </section>
+
+<!-- Start remove book modal -->
+<div class="modal fade" id="removeBookModal" tabindex="-1" aria-labelledby="removeBookModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="removeBookModalLabel">Delete Book</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are your sure you want to permanently delete this book from library?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button id="removeBookConfirm" type="button" class="btn btn-primary">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End remove book modal -->

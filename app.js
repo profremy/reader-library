@@ -2,6 +2,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const express = require('express');
 const hbs = require('express-handlebars');
+const hbsHelpers = require('./views/helpers');
 //const favicon = require('serve-favicon');
 
 // This was use to create and run the database for the first time
@@ -193,6 +194,9 @@ app.engine(
     defaultLayout: 'main',
     layoutsDir: './views/layouts',
     partialsDir: './views/includes',
+    helpers: {
+      if_equal: hbsHelpers.isEqualHelper,
+    },
   })
 );
 
@@ -216,7 +220,6 @@ app.use((err, req, res, next) => {
   );
 });
 
-// Sever port
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
 });
