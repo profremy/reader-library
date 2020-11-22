@@ -1,6 +1,6 @@
 {{!-- .search-form-container.margin-bottom>form.margin-bottom>input.form-control#book-search+button#search-books-submit.btn.btn-primary>span.fa.fa-search --}}
 <div class="search-form-container margin-bottom">
-    <form action="/books/searchbooks" method="GET" class="margin-bottom" id="search-form">
+    <form action="/books/searchbooks" method="GET" class="margin-bottom" id="search-books-form">
         <input type="text" name="booksearch" class="form-control" id="book-search"
             placeholder="Search Author, Title, Type, Sub Type, or Location">
         <button id="search-books-submit" class="btn btn-primary" type="submit">
@@ -62,12 +62,9 @@
         {{/if}}
     </tbody>
 </table>
-<h3><span class="error">{{errorMsg}}</span></h3>
-<h3><span class="success">{{successMsg}}</span></h3>
+
 
 <section id="book-cards-list" class="sm-hide">
-    <h5><span class="error">{{errorMsg}}</span></h5>
-    <h5><span class="success">{{successMsg}}</span></h5>
     {{#if books}}
     {{#each books}}
     {{!-- .card>.card-body>h5.card-title+p.card-text>strong*5 --}}
@@ -102,7 +99,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="removeBookModalLabel">Delete Book</h5>
+                <h5 class="modal-title" id="removeBookModalLabel">Delete Book!</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -118,3 +115,5 @@
     </div>
 </div>
 <!-- End remove book modal -->
+
+{{> alert}}

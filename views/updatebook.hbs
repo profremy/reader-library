@@ -5,7 +5,7 @@
         </span>
         <span>Back to search</span>
     </a>
-    <h3>Update the information for <em>"{{book.title}}"</em></h3>
+    <h3>Update the information for <em class="success">"{{book.title}}"</em></h3>
 
     <form action="/books/updatebookbyid/{{book.id}}" method="POST">
         <div class="form-group">
@@ -56,7 +56,7 @@
                 <option value="" selected disabled>--Select Location--</option>
                 {{#if locations}}
                 {{#each locations}}
-                <option {{#if_equal id ../book.book_location_id}} selected {{/if_equal}}value="{{id}}">{{location}}
+                <option {{#if_equal id ../book.book_location_id}} selected {{/if_equal}} value="{{id}}">{{location}}
                 </option>
                 {{/each}}
                 {{/if}}
@@ -68,6 +68,8 @@
             </span>
             <span>Update book</span>
         </button>
-        <div class="formMessage">{{msg}}</div>
     </form>
+
+    {{> alert}}
+
 </div>

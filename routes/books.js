@@ -46,12 +46,14 @@ const getJson = (sqlResult) => {
 // pool.query is an async function there must use async await
 router.get('/', async (req, res) => {
   // LIMIT n will display n number of records.
-  const sql = `${retrieveBookSql} LIMIT 0;`;
+  const sql = `${retrieveBookSql} LIMIT 30;`;
 
   let err;
   const books = await pool.query(sql).catch((e) => (err = e));
   if (err) {
-    res.render('books', { books: [], errorMsg: 'There was an error retrieving your books, please reload this page.' });
+    let message = 'There was an error retrieving your books, please reload this page.';
+    let messageType = 'danger';
+    res.render('books', { message, messageType });
   } else {
     res.render('books', { books });
   }
@@ -76,30 +78,39 @@ router.get('/searchbooks', async (req, res) => {
   // trim removes extra white spaces before or after term
 
   // this line is vulnerable to SQL injection attacks
-  const term = req.query.booksearch; //.trim();
+  //*const term = req.query.booksearch; //.trim();
 
   // Fix the vulnerability by using the escape() method
   const s = pool.escape(`%${req.query.booksearch.trim()}%`);
   //console.log('BookSearch term is: ', s);
   //res.send('Inside the /searchbooks route');
 
-  if (term === '') return res.render('books', { books: [], errorMsg: 'Please enter a search term.' });
+  //*if (term === '') return res.render('books', { books: [], errorMsg: 'Please enter a search term.' });
 
-  const sql = `${retrieveBookSql}
+  let message = 'Please enter a search term before attempting a search';
+  let messageType = 'danger';
+
+  if (!req.query.booksearch) {
+    res.render('books', { message, messageType });
+  } else {
+    const sql = `${retrieveBookSql}
       WHERE book.author LIKE ${s} OR book.title LIKE ${s} OR book_type.type LIKE ${s} OR book_sub_type.sub_type LIKE ${s} OR book_language.language LIKE ${s} OR book_location.location LIKE ${s} ORDER BY book_type.type, book_sub_type.sub_type, book.author;
       -- Query to retrieve books by search term`;
 
-  let err;
-  const booksResult = await pool.query(sql).catch((e) => (err = e));
-  const books = getJson(booksResult);
+    let err;
+    const booksResult = await pool.query(sql).catch((e) => (err = e));
+    const books = getJson(booksResult);
 
-  //console.log('Books Result from the database: ', booksResult);
+    //console.log('Books Result from the database: ', booksResult);
 
-  if (err) {
-    res.render('books', { books: [], errorMsg: 'There was an error with the search term, please try again.' });
-  } else {
-    // res.render('books', { books: booksResult });
-    res.render('books', { books });
+    if (err) {
+      console.error('Sql error: ', err);
+      message = 'There was an error with the search term, please try again.';
+      res.render('books', { message, messageType });
+    } else {
+      // res.render('books', { books: booksResult });
+      res.render('books', { books });
+    }
   }
 });
 
@@ -109,6 +120,9 @@ router.get('/getbookinfo', (req, res) => {
 
 router.get('/addbook', async (req, res) => {
   //res.send('Inside the /addbooks route');
+
+  let messageType = req.query.success === '1' ? 'success' : req.query.success === '0' ? 'danger' : false;
+  let message;
   const sql = `
     SELECT * FROM book_type;
     SELECT * FROM book_sub_type;
@@ -121,9 +135,14 @@ router.get('/addbook', async (req, res) => {
 
   if (err) {
     console.log('Sql error: ', err);
-    res.render('books', { books: [], errorMsg: 'There was an error adding book, please try again.' });
+    messageType = 'danger';
+    message = 'There was an error, please try that action again.';
+    res.render('books', { message, messageType });
   } else {
+    message = messageType === 'danger' ? 'There was an error adding this book, please try again' : 'This book has been added to your library.';
     const templateData = {
+      message,
+      messageType,
       types: results[0],
       subTypes: results[1],
       languages: results[2],
@@ -152,13 +171,16 @@ router.post('/insertbook', async (req, res) => {
 
   if (err) {
     console.error('Sql error: ', err);
-    res.redirect('/books/addbook?:success=0');
+    res.redirect('/books/addbook?success=0');
   } else {
-    res.redirect('/books/addbook?:success=1');
+    res.redirect('/books/addbook?success=1');
   }
 });
 
 router.get('/updatebook', async (req, res) => {
+  let messageType = req.query.success === '1' ? 'success' : req.query.success === '0' ? 'danger' : false;
+  let message;
+
   const id = pool.escape(req.query.id);
   const sql = `
     SELECT * FROM book WHERE id = ${id};
@@ -173,9 +195,14 @@ router.get('/updatebook', async (req, res) => {
 
   if (err) {
     console.error('Sql error: ', err);
-    res.render('books', { books: [], errorMsg: 'There was an error, please try again.' });
+    messageType = 'danger';
+    message = 'There was an error, please try again.';
+    res.render('books', { message, messageType });
   } else {
+    message = messageType === 'danger' ? 'There was an error updating this book, please try again' : `${results[0][0].title} has been updated.`;
     const templateData = {
+      message,
+      messageType,
       book: results[0][0],
       types: results[1],
       subTypes: results[2],
@@ -200,14 +227,14 @@ router.post('/updatebookbyid/:id', async (req, res) => {
   };
 
   let err;
-  const sql = `UPDATE book SET ? WHERE id =${pool.escape(id)};`;
+  const sql = `UPDATE book SET ? WHERE id = ${pool.escape(id)};`;
   const result = await pool.query(sql, book).catch((e) => (err = e));
 
   if (err) {
     console.error('Sql error: ', err);
-    res.redirect(`/books/updatebook?${id}&success=0`);
+    res.redirect(`/books/updatebook?id=${id}&success=0`);
   } else {
-    res.redirect(`/books/updatebook?${id}&success=1`);
+    res.redirect(`/books/updatebook?id=${id}&success=1`);
   }
 });
 
