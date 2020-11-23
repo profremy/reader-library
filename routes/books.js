@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const fetch = require('node-fetch');
 
 const pool = require('../db');
 
@@ -114,8 +115,28 @@ router.get('/searchbooks', async (req, res) => {
   }
 });
 
-router.get('/getbookinfo', (req, res) => {
-  res.send('Inside the /getbookinfo route');
+router.get('/getbookinfo', async (req, res) => {
+  // https://www.googleapis.com/books/v1/volumes?q=flowers+inauthor:keyes&key=yourAPIKey
+  const bookquery = req.query.bookquery;
+  //console.log('Bookquery: ', bookquery);
+
+  // The following line is the proper code with a test api key
+  //const query = `${bookquery}&key=${process.env.GOOGLE_BOOKS_API_KEY}`;
+
+  //This has no google api code and may show errors
+  const query = bookquery;
+
+  let err;
+  const bookResponse = await fetch(`https://www.googleapis.com/books/v1/volumes?${query}`).catch((e) => (err = e));
+
+  if (err) {
+    res.status(err.status || 500).json({ err });
+  } else {
+    const bookJson = await bookResponse.json();
+    const book = bookJson.totalItems > 0 ? bookJson.items[0] : null;
+    //res.status(200).json(bookJson);
+    res.status(200).json(book);
+  }
 });
 
 router.get('/addbook', async (req, res) => {

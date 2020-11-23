@@ -84,10 +84,33 @@ header h1 a:hover {
 #search-books-form {
     position: relative;
 }
+#search-books-form.sticky{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 5;
+    box-shadow: 0 0 35px -2px #777;
+
+}
+
+#search-books-form input.form-control{
+    border-radius: 0;
+}
+#search-books-form.sticky input.form-control {
+    padding: 0.25rem 0 0.25rem 0.75rem;
+    height: 45px;
+}
+
 #search-books-submit {
     position: absolute;
     right: 0;
     top: 0;
+}
+
+#search-books-form.sticky #search-books-submit {
+    height: 45px;
+    width: 50px;
 }
 
 table td.break-word, table td.break-word *{
@@ -170,6 +193,42 @@ table th.text-center, table td.text-center {
     margin: 0 auto;
     z-index: 3;
     box-shadow: 0 1px 10px 0 #aaa;
+}
+
+#bookDetailsModal .flex {
+    justify-content: space-evenly;
+    margin-bottom: 1rem;
+}
+#bookDetailsModal .flex img{
+    width: 128px;
+    margin: fixed;
+}
+
+#loadingSpinner {
+    position: fixed;
+    z-index: 3;
+    background: rgb(0,0,0,0.6);
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    display: none;
+}
+
+#loadingSpinner.show {
+    display: block;
+}
+
+#loadingSpinner .fa {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    margin: -25px auto 0;
+    color: #fff;
+    display: block;
+    width: 65px;
+    font-size: 65px;
 }
 
 footer {
@@ -272,7 +331,20 @@ footer ion-icon {
 
     .error {
         padding: 5px 5px;
+    }
 
+    #bookDetailsModal .flex {
+        justify-content: space-between;
+        align-items: start;
+    }
+    #bookDetailsModal .flex img {
+        max-width: 128;
+        width: 50%;
+        min-width: 110px;
+    }
+
+    #bookDetailsModal .book-details-container {
+        font-size: 0.85rem;
     }
 
 }

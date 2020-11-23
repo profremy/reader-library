@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Signika+Negative:wght@300;400;600&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="/static/dist/library.bundle.css">
@@ -14,6 +16,10 @@
 </head>
 
 <body>
+    <div id="loadingSpinner">
+        <span class="fa fa-spinner fa-spin fa-3x fa-fw"></span>
+        <span class="sr-only">Loading...</span>
+    </div>
     <section id="app">
         {{> header}}
         <div class="jumbotron">

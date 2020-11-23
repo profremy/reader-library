@@ -2,8 +2,13 @@ const $ = require('jquery');
 const self = (module.exports = {
   alertTimeout: null,
   removeBookModal: $('#removeBookModal'),
+  bookDetailsModal: $('#bookDetailsModal'),
   searchBooksForm: $('#search-books-form'),
   bookSearch: $('#book-search'),
+  defaultBookImage: '/static/img/bookcover.jpg',
+  showLoader: () => {
+    document.getElementById('loadingSpinner').classList.toggle('show');
+  },
   showAlert: (type, msg, callback) => {
     const alertStr = `
       <div class="alert alert-${type} fade show" role="alert">
