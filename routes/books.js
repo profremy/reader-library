@@ -177,8 +177,8 @@ router.post('/insertbook', async (req, res) => {
   //res.send('Inside the /insertbook route');
 
   const book = {
-    author: req.body.author.trim(),
-    title: req.body.title.trim(),
+    author: req.sanitize(req.body.author.trim()),
+    title: req.sanitize(req.body.title.trim()),
     book_type_id: req.body.type,
     book_sub_type_id: req.body.sub_type,
     book_language_id: req.body.language,
@@ -235,12 +235,12 @@ router.get('/updatebook', async (req, res) => {
 });
 
 router.post('/updatebookbyid/:id', async (req, res) => {
-  const id = req.params.id;
+  const id = req.sanitize(req.params.id);
 
   const book = {
     id,
-    author: req.body.author.trim(),
-    title: req.body.title.trim(),
+    author: req.sanitize(req.body.author.trim()),
+    title: req.sanitize(req.body.title.trim()),
     book_type_id: req.body.type,
     book_sub_type_id: req.body.sub_type,
     book_language_id: req.body.language,
@@ -260,7 +260,7 @@ router.post('/updatebookbyid/:id', async (req, res) => {
 });
 
 router.delete('/deletebook/:id', async (req, res) => {
-  const id = pool.escape(req.params.id);
+  const id = pool.escape(req.sanitize(req.params.id));
   const sql = `
   SELECT title, author FROM book WHERE id = ${id};
   DELETE FROM book WHERE id = ${id};

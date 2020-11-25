@@ -2,6 +2,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const express = require('express');
 const hbs = require('express-handlebars');
+const expressSanitizer = require('express-sanitizer');
 const hbsHelpers = require('./views/helpers');
 //const favicon = require('serve-favicon');
 
@@ -20,6 +21,9 @@ const PORT = process.env.PORT || 5000; // HEROKU supports this for hosting
 
 // Body parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
+
+// Express Sanitizer middleware
+app.use(expressSanitizer());
 
 // Setup express routes
 const mainRoutes = require('./routes');
